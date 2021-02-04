@@ -489,9 +489,14 @@ try {
 		}
 	}
 	
+    	# Apply logic to determine if it is a weekday or not
+    	$CurrentDay = [int] (Get-LocalDateTime).DayOfWeek
+    	$Weekend = (0,6)
+    	[bool] $IsWeekDay = ($CurrentDay -notin $Weekend)
+
 	Write-Log "Using current time: $($CurrentDateTime.ToString('yyyy-MM-dd HH:mm:ss')), begin peak time: $($BeginPeakDateTime.ToString('yyyy-MM-dd HH:mm:ss')), end peak time: $($EndPeakDateTime.ToString('yyyy-MM-dd HH:mm:ss'))"
 
-	[bool]$InPeakHours = ($BeginPeakDateTime -le $CurrentDateTime -and $CurrentDateTime -le $EndPeakDateTime)
+	[bool]$InPeakHours = ($BeginPeakDateTime -le $CurrentDateTime -and $CurrentDateTime -le $EndPeakDateTime -and $IsWeekDay -eq $true)
 	if ($InPeakHours) {
 		Write-Log 'In peak hours'
 	}
